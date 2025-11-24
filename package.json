@@ -1,0 +1,170 @@
+{
+  "name": "adb-pro",
+  "displayName": "ADB Pro",
+  "publisher": "adventures92",
+  "description": "Android Debug Bridge integration for VS Code",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "adb-pro.connect",
+        "title": "ADB: Connect to Device IP",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.disconnect",
+        "title": "ADB: Disconnect Device",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.installApk",
+        "title": "ADB: Install APK",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.uninstallApp",
+        "title": "ADB: Uninstall App",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.clearAppData",
+        "title": "ADB: Clear App Data",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.killApp",
+        "title": "ADB: Force Stop App",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.restartServer",
+        "title": "ADB: Restart ADB Server",
+        "category": "ADB",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "adb-pro.shell",
+        "title": "ADB: Run Shell Command",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.toggleWifi",
+        "title": "ADB: Toggle Wi-Fi",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.toggleMobileData",
+        "title": "ADB: Toggle Mobile Data",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.toggleAirplaneMode",
+        "title": "ADB: Toggle Airplane Mode",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.setAppPermission",
+        "title": "ADB: Set App Permission",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.screenshot",
+        "title": "ADB: Take Screenshot",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.logcat",
+        "title": "ADB: Logcat (Filter by Package/Level)",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.selectTargetApp",
+        "title": "ADB: Select Target App",
+        "category": "ADB"
+      },
+      {
+        "command": "adb-pro.refresh",
+        "title": "ADB: Refresh Devices",
+        "category": "ADB",
+        "icon": "$(refresh)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "adb-sidebar",
+          "title": "ADB",
+          "icon": "resources/android.svg"
+        }
+      ]
+    },
+    "views": {
+      "adb-sidebar": [
+        {
+          "id": "adb-device-list",
+          "name": "Devices & Apps",
+          "icon": "resources/android.svg"
+        },
+        {
+          "type": "webview",
+          "id": "adbWebview",
+          "name": "ADB Control Panel",
+          "icon": "resources/android.svg"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "ADB",
+      "properties": {
+        "adb.path": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the adb executable. If empty, attempts to find adb in PATH."
+        }
+      }
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "adb-pro.refresh",
+          "when": "view == adbWebview",
+          "group": "navigation"
+        },
+        {
+          "command": "adb-pro.connect",
+          "when": "view == adbWebview",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "20.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.59.8",
+    "@typescript-eslint/parser": "^5.59.8",
+    "eslint": "^8.41.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^5.1.3",
+    "@vscode/test-electron": "^2.3.2"
+  }
+}
