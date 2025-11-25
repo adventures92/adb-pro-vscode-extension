@@ -378,6 +378,7 @@ export class AdbWebviewProvider implements vscode.WebviewViewProvider {
                         
                         const isOnline = device.type === 'device';
                         const statusClass = isOnline ? 'status-online' : 'status-offline';
+                        const displayName = device.model ? device.model.replace(/_/g, ' ') : device.id;
                         
                         // Note: Toggle states are not persisted/read from device yet, defaulting to unchecked or needing state management
                         // For now, we will assume they are unchecked or we need a way to query them.
@@ -386,7 +387,10 @@ export class AdbWebviewProvider implements vscode.WebviewViewProvider {
                         
                         card.innerHTML = \`
                             <div class="device-header">
-                                <span>\${device.id}</span>
+                                <div>
+                                    <span style="display: block; font-size: 13px;">\${displayName}</span>
+                                    <span style="display: block; font-size: 11px; color: var(--vscode-descriptionForeground); font-weight: normal;">\${device.id}</span>
+                                </div>
                                 <span class="status-indicator \${statusClass}" title="\${device.type}"></span>
                             </div>
 

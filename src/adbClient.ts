@@ -10,6 +10,10 @@ const execAsync = promisify(exec);
 export interface ConnectedDevice {
     id: string;
     type: string; // 'device' | 'offline' | 'unauthorized'
+    model?: string;
+    product?: string;
+    transportId?: string;
+    connectionType: 'wired' | 'wireless';
 }
 
 /**
@@ -47,14 +51,46 @@ export class AdbClient {
      * @returns A promise that resolves to an array of ConnectedDevice objects.
      */
     async getConnectedDevices(): Promise<ConnectedDevice[]> {
-        const output = await this.execute('devices');
+        const output = await this.execute('devices -l');
         const lines = output.split('\n').slice(1); // Skip first line "List of devices attached"
         return lines
             .map(line => line.trim())
             .filter(line => line.length > 0)
             .map(line => {
-                const [id, type] = line.split(/\s+/);
-                return { id, type };
+                // Parse line: "emulator-5554 device product:sdk_gphone64_arm64 model:sdk_gphone64_arm64 device:emulator64_arm64 transport_id:1"
+                // or "192.168.1.5:5555 device product:bramble model:Pixel_4a__5G_ device:bramble transport_id:2"
+                const parts = line.split(/\s+/);
+                const id = parts[0];
+                const type = parts[1];
+
+                let model: string | undefined;
+                let product: string | undefined;
+                let transportId: string | undefined;
+
+                for (let i = 2; i < parts.length; i++) {
+                    const part = parts[i];
+                    if (part.startsWith('model:')) {
+                        model = part.substring(6);
+                    } else if (part.startsWith('product:')) {
+                        product = part.substring(8);
+                    } else if (part.startsWith('transport_id:')) {
+                        transportId = part.substring(13);
+                    }
+                }
+
+                // Determine connection type
+                // IP address pattern: digits.digits.digits.digits:digits
+                const isIpAddress = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+$/.test(id);
+                const connectionType = isIpAddress ? 'wireless' : 'wired';
+
+                return {
+                    id,
+                    type,
+                    model,
+                    product,
+                    transportId,
+                    connectionType
+                };
             });
     }
 

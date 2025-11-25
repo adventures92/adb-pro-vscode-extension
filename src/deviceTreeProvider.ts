@@ -42,10 +42,10 @@ export class DeviceTreeProvider implements vscode.TreeDataProvider<DeviceTreeIte
                 new ActionTreeItem('Logcat', element.device.id, 'adb-pro.logcat', new vscode.ThemeIcon('output')),
                 new ActionTreeItem('Shell', element.device.id, 'adb-pro.shell', new vscode.ThemeIcon('terminal')),
                 new ActionTreeItem('Manage Permissions', element.device.id, 'adb-pro.setAppPermission', new vscode.ThemeIcon('key')),
-                new ActionTreeItem('Take Screenshot', element.device.id, 'adb-pro.screenshot', new vscode.ThemeIcon('camera')),
+                new ActionTreeItem('Take Screenshot', element.device.id, 'adb-pro.screenshot', new vscode.ThemeIcon('device-camera')),
                 new ActionTreeItem('Toggle Wi-Fi', element.device.id, 'adb-pro.toggleWifi', new vscode.ThemeIcon('radio-tower')),
                 new ActionTreeItem('Toggle Mobile Data', element.device.id, 'adb-pro.toggleMobileData', new vscode.ThemeIcon('radio-tower')),
-                new ActionTreeItem('Toggle Airplane Mode', element.device.id, 'adb-pro.toggleAirplaneMode', new vscode.ThemeIcon('plane'))
+                new ActionTreeItem('Toggle Airplane Mode', element.device.id, 'adb-pro.toggleAirplaneMode', new vscode.ThemeIcon('rocket'))
             ];
         }
         return [];
@@ -54,11 +54,20 @@ export class DeviceTreeProvider implements vscode.TreeDataProvider<DeviceTreeIte
 
 export class DeviceTreeItem extends vscode.TreeItem {
     constructor(public readonly device: ConnectedDevice) {
-        super(device.id, vscode.TreeItemCollapsibleState.Collapsed);
-        this.tooltip = `${device.id} (${device.type})`;
-        this.description = device.type;
+        // Use model name as label if available, otherwise fallback to ID
+        const label = device.model ? device.model.replace(/_/g, ' ') : device.id;
+        super(label, vscode.TreeItemCollapsibleState.Collapsed);
+
+        this.description = device.id;
+        this.tooltip = `Model: ${device.model || 'Unknown'}\nID: ${device.id}\nType: ${device.type}\nConnection: ${device.connectionType}`;
         this.contextValue = 'device';
-        this.iconPath = new vscode.ThemeIcon('device-mobile');
+
+        // Set icon based on connection type
+        if (device.connectionType === 'wireless') {
+            this.iconPath = new vscode.ThemeIcon('radio-tower');
+        } else {
+            this.iconPath = new vscode.ThemeIcon('device-mobile');
+        }
     }
 }
 

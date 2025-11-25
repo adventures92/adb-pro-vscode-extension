@@ -2,14 +2,31 @@
   "name": "adb-pro",
   "displayName": "ADB Pro",
   "publisher": "adventures92",
-  "description": "Android Debug Bridge integration for VS Code",
+  "icon": "resources/icon.png",
+  "description": "The ultimate Android Debug Bridge (ADB) tool for VS Code. Manage devices, install APKs, view Logcat, and control permissions directly from your editor.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.80.0"
   },
   "categories": [
+    "Programming Languages",
+    "Debuggers",
     "Other"
   ],
+  "keywords": [
+    "android",
+    "adb",
+    "mobile",
+    "debug",
+    "apk",
+    "logcat",
+    "device manager",
+    "permissions"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adventures92/adb-pro-vscode-extension"
+  },
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
@@ -108,7 +125,7 @@
         {
           "id": "adb-sidebar",
           "title": "ADB",
-          "icon": "resources/android.svg"
+          "icon": "resources/icon.png"
         }
       ]
     },
@@ -117,13 +134,13 @@
         {
           "id": "adb-device-list",
           "name": "Devices & Apps",
-          "icon": "resources/android.svg"
+          "icon": "resources/icon.png"
         },
         {
           "type": "webview",
           "id": "adbWebview",
           "name": "ADB Control Panel",
-          "icon": "resources/android.svg"
+          "icon": "resources/icon.png"
         }
       ]
     },
