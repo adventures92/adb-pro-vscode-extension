@@ -1,14 +1,16 @@
 # ADB Pro for VS Code
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://vsmarketplacebadge.apphb.com/version/adventures92.adb-pro.svg)](https://marketplace.visualstudio.com/items?itemName=adventures92.adb-pro)
-[![Installs](https://vsmarketplacebadge.apphb.com/installs/adventures92.adb-pro.svg)](https://marketplace.visualstudio.com/items?itemName=adventures92.adb-pro)
+[![Version](https://img.shields.io/visual-studio-marketplace/v/adventures92.adb-pro)](https://marketplace.visualstudio.com/items?itemName=adventures92.adb-pro)
+[![Installs](https://img.shields.io/visual-studio-marketplace/i/adventures92.adb-pro)](https://marketplace.visualstudio.com/items?itemName=adventures92.adb-pro)
 
 **ADB Pro** is a powerful Visual Studio Code extension that integrates the Android Debug Bridge (ADB) directly into your editor. It provides a user-friendly, native-looking sidebar for managing connected Android devices, installing apps, debugging, and more.
 
 ## Features
 
 ### 📱 Device Management Sidebar
+![Device Sidebar](images/sidebar.png)
+
 *   **Native UI:** A clean, VS Code-native Webview interface.
 *   **Device List:** View all connected devices with their status (device, offline, unauthorized).
 *   **One-Click Actions:** Perform common tasks directly from the device card.
@@ -22,6 +24,12 @@
 *   **Force Stop:** Kill a running application process.
 *   **Permissions:** Grant or revoke application permissions.
 *   **Screenshots:** Capture device screenshots and save them locally.
+
+#### App Selection
+![App Selection](images/select-app.png)
+
+#### Permission Management
+![Permission Management](images/permission.png)
 
 ### 🔍 Advanced Debugging
 *   **Logcat Filtering:**
@@ -39,6 +47,8 @@
 4.  Click the **Action Buttons** (Trash, Stop, etc.) to perform specific actions.
 
 ### Command Palette
+![Command Palette](images/commands.png)
+
 All features are also available via the Command Palette (`Cmd+Shift+P` or `Ctrl+Shift+P`). Type `ADB:` to see available commands:
 
 *   `ADB: Connect to Device IP`

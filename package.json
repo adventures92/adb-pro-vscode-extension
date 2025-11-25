@@ -33,89 +33,89 @@
     "commands": [
       {
         "command": "adb-pro.connect",
-        "title": "ADB: Connect to Device IP",
+        "title": "Connect to Device IP",
         "category": "ADB"
       },
       {
         "command": "adb-pro.disconnect",
-        "title": "ADB: Disconnect Device",
+        "title": "Disconnect Device",
         "category": "ADB"
       },
       {
         "command": "adb-pro.installApk",
-        "title": "ADB: Install APK",
+        "title": "Install APK",
         "category": "ADB"
       },
       {
         "command": "adb-pro.uninstallApp",
-        "title": "ADB: Uninstall App",
+        "title": "Uninstall App",
         "category": "ADB"
       },
       {
         "command": "adb-pro.clearAppData",
-        "title": "ADB: Clear App Data",
+        "title": "Clear App Data",
         "category": "ADB"
       },
       {
         "command": "adb-pro.killApp",
-        "title": "ADB: Force Stop App",
+        "title": "Force Stop App",
         "category": "ADB"
       },
       {
         "command": "adb-pro.restartApp",
-        "title": "ADB: Restart App",
+        "title": "Restart App",
         "category": "ADB",
         "icon": "$(debug-restart)"
       },
       {
         "command": "adb-pro.restartServer",
-        "title": "ADB: Restart ADB Server",
+        "title": "Restart ADB Server",
         "category": "ADB",
         "icon": "$(refresh)"
       },
       {
         "command": "adb-pro.shell",
-        "title": "ADB: Run Shell Command",
+        "title": "Run Shell Command",
         "category": "ADB"
       },
       {
         "command": "adb-pro.toggleWifi",
-        "title": "ADB: Toggle Wi-Fi",
+        "title": "Toggle Wi-Fi",
         "category": "ADB"
       },
       {
         "command": "adb-pro.toggleMobileData",
-        "title": "ADB: Toggle Mobile Data",
+        "title": "Toggle Mobile Data",
         "category": "ADB"
       },
       {
         "command": "adb-pro.toggleAirplaneMode",
-        "title": "ADB: Toggle Airplane Mode",
+        "title": "Toggle Airplane Mode",
         "category": "ADB"
       },
       {
         "command": "adb-pro.setAppPermission",
-        "title": "ADB: Set App Permission",
+        "title": "Set App Permission",
         "category": "ADB"
       },
       {
         "command": "adb-pro.screenshot",
-        "title": "ADB: Take Screenshot",
+        "title": "Take Screenshot",
         "category": "ADB"
       },
       {
         "command": "adb-pro.logcat",
-        "title": "ADB: Logcat (Filter by Package/Level)",
+        "title": "Logcat (Filter by Package/Level)",
         "category": "ADB"
       },
       {
         "command": "adb-pro.selectTargetApp",
-        "title": "ADB: Select Target App",
+        "title": "Select Target App",
         "category": "ADB"
       },
       {
         "command": "adb-pro.refresh",
-        "title": "ADB: Refresh Devices",
+        "title": "Refresh Devices",
         "category": "ADB",
         "icon": "$(refresh)"
       }
