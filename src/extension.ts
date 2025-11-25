@@ -284,12 +284,22 @@ export function activate(context: vscode.ExtensionContext) {
                     while (true) {
                         const permissions = await adbClient.getAppPermissions(deviceId, packageName);
 
-                        const items: vscode.QuickPickItem[] = permissions.map(p => ({
+                        const items: vscode.QuickPickItem[] = [];
+
+                        // Add Batch Actions if there are permissions
+                        if (permissions.length > 0) {
+                            items.push({ label: '$(check-all) Grant All Permissions', description: 'Grant all denied permissions' });
+                            items.push({ label: '$(close-all) Revoke All Permissions', description: 'Revoke all granted permissions' });
+                            items.push({ label: '', kind: vscode.QuickPickItemKind.Separator });
+                        }
+
+                        items.push(...permissions.map(p => ({
                             label: `${p.granted ? '$(check)' : '$(x)'} ${p.name}`,
                             description: p.granted ? 'Granted' : 'Denied',
                             detail: 'Click to toggle'
-                        }));
+                        })));
 
+                        items.push({ label: '', kind: vscode.QuickPickItemKind.Separator });
                         items.push({ label: '$(close) Done', description: 'Exit permission manager' });
 
                         const selected = await vscode.window.showQuickPick(items, {
@@ -298,6 +308,52 @@ export function activate(context: vscode.ExtensionContext) {
 
                         if (!selected || selected.label === '$(close) Done') {
                             break;
+                        }
+
+                        if (selected.label === '$(check-all) Grant All Permissions') {
+                            await vscode.window.withProgress({
+                                location: vscode.ProgressLocation.Notification,
+                                title: `Granting all permissions for ${packageName}...`,
+                                cancellable: false
+                            }, async (progress) => {
+                                const denied = permissions.filter(p => !p.granted);
+                                const total = denied.length;
+                                let current = 0;
+                                for (const p of denied) {
+                                    progress.report({ message: `${p.name} (${current + 1}/${total})`, increment: (1 / total) * 100 });
+                                    try {
+                                        await adbClient.setAppPermission(deviceId, packageName, p.name, true);
+                                    } catch (e) {
+                                        console.error(`Failed to grant ${p.name}`, e);
+                                    }
+                                    current++;
+                                }
+                            });
+                            vscode.window.showInformationMessage(`Granted all permissions for ${packageName}`);
+                            continue;
+                        }
+
+                        if (selected.label === '$(close-all) Revoke All Permissions') {
+                            await vscode.window.withProgress({
+                                location: vscode.ProgressLocation.Notification,
+                                title: `Revoking all permissions for ${packageName}...`,
+                                cancellable: false
+                            }, async (progress) => {
+                                const granted = permissions.filter(p => p.granted);
+                                const total = granted.length;
+                                let current = 0;
+                                for (const p of granted) {
+                                    progress.report({ message: `${p.name} (${current + 1}/${total})`, increment: (1 / total) * 100 });
+                                    try {
+                                        await adbClient.setAppPermission(deviceId, packageName, p.name, false);
+                                    } catch (e) {
+                                        console.error(`Failed to revoke ${p.name}`, e);
+                                    }
+                                    current++;
+                                }
+                            });
+                            vscode.window.showInformationMessage(`Revoked all permissions for ${packageName}`);
+                            continue;
                         }
 
                         // Extract permission name
