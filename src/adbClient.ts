@@ -234,4 +234,9 @@ export class AdbClient {
             return [];
         }
     }
+
+    async startApp(deviceId: string, packageName: string): Promise<string> {
+        // Using monkey to start the app is a common trick to avoid needing the main activity name
+        return this.execute(`-s ${deviceId} shell monkey -p ${packageName} -c android.intent.category.LAUNCHER 1`);
+    }
 }

@@ -34,17 +34,18 @@ export class DeviceTreeProvider implements vscode.TreeDataProvider<DeviceTreeIte
             return items;
         } else if (element instanceof DeviceTreeItem) {
             return [
-                new ActionTreeItem('Install APK', element.device.id, 'adb-pro.installApk'),
-                new ActionTreeItem('Uninstall App', element.device.id, 'adb-pro.uninstallApp'),
-                new ActionTreeItem('Clear App Data', element.device.id, 'adb-pro.clearAppData'),
-                new ActionTreeItem('Kill App', element.device.id, 'adb-pro.killApp'),
-                new ActionTreeItem('Logcat', element.device.id, 'adb-pro.logcat'),
-                new ActionTreeItem('Shell', element.device.id, 'adb-pro.shell'),
-                new ActionTreeItem('Toggle Wi-Fi', element.device.id, 'adb-pro.toggleWifi'),
-                new ActionTreeItem('Toggle Mobile Data', element.device.id, 'adb-pro.toggleMobileData'),
-                new ActionTreeItem('Toggle Airplane Mode', element.device.id, 'adb-pro.toggleAirplaneMode'),
-                new ActionTreeItem('Manage Permissions', element.device.id, 'adb-pro.setAppPermission'),
-                new ActionTreeItem('Take Screenshot', element.device.id, 'adb-pro.screenshot')
+                new ActionTreeItem('Restart App', element.device.id, 'adb-pro.restartApp', new vscode.ThemeIcon('debug-restart')),
+                new ActionTreeItem('Kill App', element.device.id, 'adb-pro.killApp', new vscode.ThemeIcon('debug-stop')),
+                new ActionTreeItem('Clear App Data', element.device.id, 'adb-pro.clearAppData', new vscode.ThemeIcon('clear-all')),
+                new ActionTreeItem('Uninstall App', element.device.id, 'adb-pro.uninstallApp', new vscode.ThemeIcon('trash')),
+                new ActionTreeItem('Install APK', element.device.id, 'adb-pro.installApk', new vscode.ThemeIcon('cloud-upload')),
+                new ActionTreeItem('Logcat', element.device.id, 'adb-pro.logcat', new vscode.ThemeIcon('output')),
+                new ActionTreeItem('Shell', element.device.id, 'adb-pro.shell', new vscode.ThemeIcon('terminal')),
+                new ActionTreeItem('Manage Permissions', element.device.id, 'adb-pro.setAppPermission', new vscode.ThemeIcon('key')),
+                new ActionTreeItem('Take Screenshot', element.device.id, 'adb-pro.screenshot', new vscode.ThemeIcon('camera')),
+                new ActionTreeItem('Toggle Wi-Fi', element.device.id, 'adb-pro.toggleWifi', new vscode.ThemeIcon('radio-tower')),
+                new ActionTreeItem('Toggle Mobile Data', element.device.id, 'adb-pro.toggleMobileData', new vscode.ThemeIcon('radio-tower')),
+                new ActionTreeItem('Toggle Airplane Mode', element.device.id, 'adb-pro.toggleAirplaneMode', new vscode.ThemeIcon('plane'))
             ];
         }
         return [];
@@ -65,7 +66,8 @@ export class ActionTreeItem extends vscode.TreeItem {
     constructor(
         public readonly label: string,
         public readonly deviceId: string,
-        public readonly commandId: string
+        public readonly commandId: string,
+        public readonly icon?: vscode.ThemeIcon
     ) {
         super(label, vscode.TreeItemCollapsibleState.None);
         this.contextValue = 'action';
@@ -74,6 +76,9 @@ export class ActionTreeItem extends vscode.TreeItem {
             title: label,
             arguments: [deviceId]
         };
+        if (icon) {
+            this.iconPath = icon;
+        }
     }
 }
 

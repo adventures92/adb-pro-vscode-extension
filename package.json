@@ -45,6 +45,12 @@
         "category": "ADB"
       },
       {
+        "command": "adb-pro.restartApp",
+        "title": "ADB: Restart App",
+        "category": "ADB",
+        "icon": "$(debug-restart)"
+      },
+      {
         "command": "adb-pro.restartServer",
         "title": "ADB: Restart ADB Server",
         "category": "ADB",

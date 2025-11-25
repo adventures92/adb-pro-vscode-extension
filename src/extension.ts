@@ -158,11 +158,26 @@ export function activate(context: vscode.ExtensionContext) {
         if (deviceId) {
             const packageName = await resolvePackageName(deviceId);
             if (packageName) {
-                try {
-                    const result = await adbClient.clearAppData(deviceId, packageName);
-                    vscode.window.showInformationMessage(`Clear Data Result: ${result}`);
-                } catch (e: any) {
-                    vscode.window.showErrorMessage(e.message);
+                const action = await vscode.window.showQuickPick(
+                    [
+                        { label: '$(trash) Clear Data Only', description: 'Clear app data but do not restart' },
+                        { label: '$(refresh) Clear Data & Restart', description: 'Clear app data and launch the app' }
+                    ],
+                    { placeHolder: `Clear Data for ${packageName}?` }
+                );
+
+                if (action) {
+                    try {
+                        const result = await adbClient.clearAppData(deviceId, packageName);
+                        vscode.window.showInformationMessage(`Clear Data Result: ${result}`);
+
+                        if (action.label === '$(refresh) Clear Data & Restart') {
+                            await adbClient.startApp(deviceId, packageName);
+                            vscode.window.showInformationMessage(`Restarted ${packageName}`);
+                        }
+                    } catch (e: any) {
+                        vscode.window.showErrorMessage(e.message);
+                    }
                 }
             }
         }
@@ -185,6 +200,37 @@ export function activate(context: vscode.ExtensionContext) {
                 try {
                     const result = await adbClient.killApp(deviceId, packageName);
                     vscode.window.showInformationMessage(`Kill App Result: ${result}`);
+                } catch (e: any) {
+                    vscode.window.showErrorMessage(e.message);
+                }
+            }
+        }
+    }));
+
+    // Restart App
+    context.subscriptions.push(vscode.commands.registerCommand('adb-pro.restartApp', async (arg?: string | DeviceTreeItem) => {
+        let deviceId: string | undefined;
+        if (arg instanceof DeviceTreeItem) {
+            deviceId = arg.device.id;
+        } else {
+            deviceId = arg;
+        }
+        if (!deviceId) {
+            deviceId = await pickDevice(adbClient);
+        }
+        if (deviceId) {
+            const packageName = await resolvePackageName(deviceId);
+            if (packageName) {
+                try {
+                    await vscode.window.withProgress({
+                        location: vscode.ProgressLocation.Notification,
+                        title: `Restarting ${packageName}...`,
+                        cancellable: false
+                    }, async () => {
+                        await adbClient.killApp(deviceId, packageName);
+                        await adbClient.startApp(deviceId, packageName);
+                    });
+                    vscode.window.showInformationMessage(`Restarted ${packageName}`);
                 } catch (e: any) {
                     vscode.window.showErrorMessage(e.message);
                 }
