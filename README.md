@@ -85,6 +85,7 @@ You can configure the path to your ADB executable if it's not in your system PAT
 
 ## Troubleshooting
 
+*   **ADB Not Found:** If you see an error saying `adb: command not found`, make sure ADB is installed or configure the `adb.path` setting (see [Configuration](#configuration)).
 *   **Device Not Showing:** Ensure USB debugging is enabled and the device is authorized. Try running `adb devices` in your terminal.
 *   **Permission Denied:** Some actions (like toggling Mobile Data on newer Android versions) may require root access or specific permissions.
 *   **Logcat Empty:** If filtering by package, ensure the app is running so its PID can be resolved.
