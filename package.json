@@ -151,6 +151,11 @@
           "type": "string",
           "default": "",
           "description": "Path to the adb executable. If empty, attempts to find adb in PATH."
+        },
+        "adb.debug": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable debug logging for ADB commands."
         }
       }
     },
