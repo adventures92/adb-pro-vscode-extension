@@ -28,20 +28,32 @@ export class AdbClient {
     }
 
     private async execute(command: string): Promise<string> {
-        const fullCommand = `${this.adbPath} ${command}`;
-        this.outputChannel.appendLine(`> ${fullCommand}`);
+        const fullCommand = `"${this.adbPath}" ${command}`;
+        const config = vscode.workspace.getConfiguration('adb');
+        const debug = config.get<boolean>('debug') || false;
+
+        if (debug) {
+            this.outputChannel.appendLine(`> ${fullCommand}`);
+        }
         try {
             const { stdout, stderr } = await execAsync(fullCommand);
-            if (stdout) {
+            if (debug && stdout) {
                 this.outputChannel.appendLine(stdout);
             }
             if (stderr) {
-                this.outputChannel.appendLine(`stderr: ${stderr}`);
+                // Always log stderr if it's not empty, or maybe only on debug? 
+                // ADB often prints non-error info to stderr (like file transfer progress), 
+                // so let's respect the debug flag for generic stderr too, unless it throws.
+                if (debug) {
+                    this.outputChannel.appendLine(`stderr: ${stderr}`);
+                }
             }
             return stdout.trim();
         } catch (error: any) {
-            this.outputChannel.appendLine(`Error: ${error.message}`);
-            this.outputChannel.show(true);
+            if (debug) {
+                this.outputChannel.appendLine(`Error: ${error.message}`);
+            }
+            // this.outputChannel.show(true); // Don't auto-open output panel on error
             throw new Error(`ADB Error: ${error.message}`);
         }
     }
@@ -265,8 +277,9 @@ export class AdbClient {
                 }
             }
             return permissions.sort((a, b) => a.name.localeCompare(b.name));
+            return permissions.sort((a, b) => a.name.localeCompare(b.name));
         } catch (e) {
-            console.error('Failed to get app permissions', e);
+            // console.error('Failed to get app permissions', e);
             return [];
         }
     }

@@ -100,7 +100,7 @@ export class AdbWebviewProvider implements vscode.WebviewViewProvider {
                 const devices = await this.adbClient.getConnectedDevices();
                 this._view.webview.postMessage({ type: 'updateDevices', devices });
             } catch (e) {
-                console.error('Failed to get devices', e);
+                // console.error('Failed to get devices', e);
             }
         }
     }
