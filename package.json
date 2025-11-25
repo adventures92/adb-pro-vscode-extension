@@ -125,7 +125,7 @@
         {
           "id": "adb-sidebar",
           "title": "ADB",
-          "icon": "resources/icon.png"
+          "icon": "resources/sidebar.svg"
         }
       ]
     },
@@ -134,13 +134,13 @@
         {
           "id": "adb-device-list",
           "name": "Devices & Apps",
-          "icon": "resources/icon.png"
+          "icon": "resources/sidebar.svg"
         },
         {
           "type": "webview",
           "id": "adbWebview",
           "name": "ADB Control Panel",
-          "icon": "resources/icon.png"
+          "icon": "resources/sidebar.svg"
         }
       ]
     },
