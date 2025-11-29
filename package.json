@@ -4,7 +4,7 @@
   "publisher": "adventures92",
   "icon": "resources/icon.png",
   "description": "The ultimate Android Debug Bridge (ADB) tool for VS Code. Manage devices, install APKs, view Logcat, and control permissions directly from your editor.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.80.0"
   },
