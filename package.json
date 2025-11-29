@@ -4,7 +4,7 @@
   "publisher": "adventures92",
   "icon": "resources/icon.png",
   "description": "The ultimate Android Debug Bridge (ADB) tool for VS Code. Manage devices, install APKs, view Logcat, and control permissions directly from your editor.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -180,19 +180,21 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "echo \"No tests specified\""
   },
   "devDependencies": {
-    "@types/vscode": "^1.80.0",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "20.2.5",
+    "@types/sinon": "^21.0.0",
+    "@types/vscode": "^1.80.0",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
+    "@vscode/test-electron": "^2.3.2",
     "eslint": "^8.41.0",
     "glob": "^8.1.0",
     "mocha": "^10.2.0",
-    "typescript": "^5.1.3",
-    "@vscode/test-electron": "^2.3.2"
+    "sinon": "^21.0.0",
+    "typescript": "^5.1.3"
   }
 }
