@@ -28,7 +28,30 @@ The workflow is located at `.github/workflows/publish.yml`. It is a **manual** w
     - (Optional) Check **Dry Run** if you only want to test the build and packaging process without actually publishing.
     - Click **Run workflow**.
 
-### What the Workflow Does
+## Testing Locally
+
+You can simulate the workflow steps on your local machine to ensure the extension builds and packages correctly before pushing.
+
+1.  **Build**:
+    ```bash
+    npm ci
+    npm run compile
+    ```
+
+2.  **Package**:
+    ```bash
+    npx vsce package
+    ```
+    This will generate a `.vsix` file in your project root if successful.
+
+3.  **Simulate GitHub Action (Advanced)**:
+    You can use [nektos/act](https://github.com/nektos/act) to run the workflow locally in a Docker container:
+    ```bash
+    brew install act
+    act workflow_dispatch -W .github/workflows/publish.yml --input dry_run=true
+    ```
+
+## What the Workflow Does
 
 1.  **Build & Test**: Installs dependencies, runs tests, and compiles the extension.
 2.  **Package**: Creates the `.vsix` extension package.

@@ -19,3 +19,6 @@ out/
 
 # macOS
 .DS_Store
+
+# Testing
+.vscode-test/

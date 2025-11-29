@@ -120,7 +120,7 @@ export class AdbWebviewProvider implements vscode.WebviewViewProvider {
             <title>ADB Control Panel</title>
             <style>
                 :root {
-                    --container-paddding: 20px;
+                    --container-padding: 10px;
                     --input-padding-vertical: 6px;
                     --input-padding-horizontal: 4px;
                     --input-margin-vertical: 4px;
@@ -130,27 +130,29 @@ export class AdbWebviewProvider implements vscode.WebviewViewProvider {
                 body {
                     font-family: var(--vscode-font-family);
                     color: var(--vscode-foreground);
-                    background-color: var(--vscode-editor-background);
-                    padding: var(--container-paddding);
+                    background-color: var(--vscode-sideBar-background);
+                    padding: var(--container-padding);
                     margin: 0;
                 }
 
                 h3 {
-                    margin: 0 0 10px 0;
+                    margin: 16px 0 8px 0;
                     font-size: 11px;
-                    font-weight: 700;
+                    font-weight: 600;
                     text-transform: uppercase;
                     color: var(--vscode-sideBarSectionHeader-foreground);
+                    letter-spacing: 0.5px;
+                }
+                
+                h3:first-child {
+                    margin-top: 0;
                 }
 
-                .section {
-                    margin-bottom: 24px;
-                }
-
+                /* Input Group */
                 .input-group {
                     display: flex;
-                    gap: 8px;
-                    margin-bottom: 10px;
+                    gap: 6px;
+                    margin-bottom: 16px;
                 }
 
                 input[type="text"] {
@@ -158,47 +160,94 @@ export class AdbWebviewProvider implements vscode.WebviewViewProvider {
                     background: var(--vscode-input-background);
                     color: var(--vscode-input-foreground);
                     border: 1px solid var(--vscode-input-border);
-                    padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+                    padding: 4px 8px;
+                    height: 28px;
+                    box-sizing: border-box;
                     outline: none;
+                    border-radius: 2px;
                 }
 
                 input[type="text"]:focus {
                     border-color: var(--vscode-focusBorder);
                 }
 
+                input[type="text"]::placeholder {
+                    color: var(--vscode-input-placeholderForeground);
+                }
+
+                /* VS Code Button Styles */
                 button {
-                    background: var(--vscode-button-background);
-                    color: var(--vscode-button-foreground);
                     border: none;
-                    padding: 6px 12px;
+                    padding: 4px 12px;
+                    height: 28px;
                     cursor: pointer;
                     font-family: var(--vscode-font-family);
                     font-size: 13px;
-                    display: flex;
+                    display: inline-flex;
                     align-items: center;
                     justify-content: center;
+                    gap: 6px;
+                    outline: none;
+                    border-radius: 4px; /* Matches screenshot */
+                    box-sizing: border-box;
+                    width: 100%;
+                    font-weight: 500;
                 }
 
-                button:hover {
-                    background: var(--vscode-button-hoverBackground);
+                /* Primary Button */
+                button.primary {
+                    background-color: var(--vscode-button-background);
+                    color: var(--vscode-button-foreground);
                 }
 
+                button.primary:hover {
+                    background-color: var(--vscode-button-hoverBackground);
+                }
+
+                /* Secondary Button */
+                button.secondary {
+                    background-color: var(--vscode-button-secondaryBackground);
+                    color: var(--vscode-button-secondaryForeground);
+                    border: 1px solid var(--vscode-widget-border); /* Subtle border like screenshot */
+                }
+
+                button.secondary:hover {
+                    background-color: var(--vscode-button-secondaryHoverBackground);
+                }
+                
+                /* Small Button variant */
+                button.small {
+                    height: 24px;
+                    font-size: 12px;
+                    padding: 2px 8px;
+                }
+
+                /* Icon Button (Toolbar style) */
                 button.icon-btn {
-                    padding: 4px;
                     background: transparent;
                     color: var(--vscode-icon-foreground);
+                    padding: 4px;
+                    width: 22px;
+                    height: 22px;
+                    border-radius: 3px;
+                    width: auto;
                 }
                 
                 button.icon-btn:hover {
                     background: var(--vscode-toolbar-hoverBackground);
                 }
 
-                .device-card {
-                    background: var(--vscode-sideBar-background);
-                    border: 1px solid var(--vscode-widget-border);
-                    padding: 12px;
-                    margin-bottom: 12px;
-                    border-radius: 0px;
+                /* Device List Item */
+                .device-item {
+                    background: var(--vscode-list-inactiveSelectionBackground);
+                    border: 1px solid transparent;
+                    padding: 10px;
+                    margin-bottom: 10px;
+                    border-radius: 4px;
+                }
+
+                .device-item:hover {
+                    border-color: var(--vscode-focusBorder);
                 }
 
                 .device-header {
@@ -206,85 +255,36 @@ export class AdbWebviewProvider implements vscode.WebviewViewProvider {
                     justify-content: space-between;
                     align-items: center;
                     margin-bottom: 12px;
+                }
+
+                .device-name {
                     font-weight: 600;
                     font-size: 13px;
-                }
-
-                .status-indicator {
-                    width: 8px;
-                    height: 8px;
-                    border-radius: 50%;
-                    display: inline-block;
-                    margin-left: 8px;
-                }
-
-                .status-online { background-color: var(--vscode-testing-iconPassed); }
-                .status-offline { background-color: var(--vscode-testing-iconFailed); }
-
-                .toggles-container {
                     display: flex;
-                    justify-content: space-between;
-                    margin-bottom: 16px;
-                    padding-bottom: 12px;
-                    border-bottom: 1px solid var(--vscode-settings-dropdownBorder);
-                }
-
-                .toggle-item {
-                    display: flex;
-                    flex-direction: column;
                     align-items: center;
-                    font-size: 11px;
+                    gap: 6px;
+                }
+
+                .connection-badge {
+                    font-size: 9px;
+                    padding: 2px 6px;
+                    border-radius: 2px;
+                    background-color: var(--vscode-badge-background);
+                    color: var(--vscode-badge-foreground);
+                    text-transform: uppercase;
+                }
+
+                /* Action Groups */
+                .action-section {
+                    margin-top: 16px;
+                }
+                
+                .section-title {
+                    font-size: 10px;
                     color: var(--vscode-descriptionForeground);
-                }
-
-                /* Switch Toggle Style */
-                .switch {
-                    position: relative;
-                    display: inline-block;
-                    width: 32px;
-                    height: 18px;
-                    margin-bottom: 4px;
-                }
-
-                .switch input { 
-                    opacity: 0;
-                    width: 0;
-                    height: 0;
-                }
-
-                .slider {
-                    position: absolute;
-                    cursor: pointer;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background-color: var(--vscode-input-background);
-                    border: 1px solid var(--vscode-input-border);
-                    transition: .4s;
-                    border-radius: 18px;
-                }
-
-                .slider:before {
-                    position: absolute;
-                    content: "";
-                    height: 12px;
-                    width: 12px;
-                    left: 2px;
-                    bottom: 2px;
-                    background-color: var(--vscode-foreground);
-                    transition: .4s;
-                    border-radius: 50%;
-                }
-
-                input:checked + .slider {
-                    background-color: var(--vscode-button-background);
-                    border-color: var(--vscode-button-background);
-                }
-
-                input:checked + .slider:before {
-                    transform: translateX(14px);
-                    background-color: var(--vscode-button-foreground);
+                    margin-bottom: 8px;
+                    text-transform: uppercase;
+                    font-weight: 600;
                 }
 
                 .actions-grid {
@@ -293,47 +293,59 @@ export class AdbWebviewProvider implements vscode.WebviewViewProvider {
                     gap: 8px;
                 }
 
-                .action-btn {
-                    background: var(--vscode-button-secondaryBackground);
-                    color: var(--vscode-button-secondaryForeground);
-                    padding: 6px;
-                    font-size: 12px;
-                    text-align: center;
-                }
-
-                .action-btn:hover {
-                    background: var(--vscode-button-secondaryHoverBackground);
-                }
-
-                .disconnect-btn {
+                .full-width {
                     grid-column: span 2;
-                    margin-top: 8px;
-                    background: var(--vscode-errorForeground);
-                    color: white;
-                    opacity: 0.9;
+                }
+                
+                /* Connectivity Rows */
+                .connectivity-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 6px;
+                    background-color: var(--vscode-editor-inactiveSelectionBackground);
+                    padding: 6px 8px;
+                    border-radius: 4px;
+                }
+                
+                .connectivity-label {
+                    font-size: 12px;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+                
+                .connectivity-actions {
+                    display: flex;
+                    gap: 4px;
+                }
+                
+                .connectivity-actions button {
+                    width: auto;
+                    min-width: 40px;
                 }
 
-                .disconnect-btn:hover {
-                    opacity: 1;
-                    background: var(--vscode-errorForeground);
+                /* SVG Icons */
+                .icon {
+                    width: 16px;
+                    height: 16px;
+                    fill: currentColor;
                 }
 
             </style>
         </head>
         <body>
-            <div class="section">
+            <div class="container">
                 <h3>Connect Device</h3>
                 <div class="input-group">
-                    <input type="text" id="ipInput" placeholder="192.168.1.x:5555">
-                    <button id="connectBtn">Connect</button>
+                    <input type="text" id="ipInput" placeholder="IP Address (e.g. 192.168.1.5:5555)">
+                    <button id="connectBtn" class="primary" style="width: auto;">Connect</button>
                 </div>
-            </div>
 
-            <div class="section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <h3>Connected Devices</h3>
                     <button id="refreshBtn" class="icon-btn" title="Refresh">
-                        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M13.65 2.35A7.958 7.958 0 0 0 8 0a8 8 0 1 0 0 16c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 8 14 6 6 0 1 1 8 2c1.66 0 3.14.69 4.22 1.78L9 7h7V0l-2.35 2.35z"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M13.65 2.35A7.958 7.958 0 0 0 8 0a8 8 0 1 0 0 16c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 8 14 6 6 0 1 1 8 2c1.66 0 3.14.69 4.22 1.78L9 7h7V0l-2.35 2.35z"/></svg>
                     </button>
                 </div>
                 <div id="deviceList"></div>
@@ -368,68 +380,92 @@ export class AdbWebviewProvider implements vscode.WebviewViewProvider {
                 function renderDevices(devices) {
                     deviceList.innerHTML = '';
                     if (devices.length === 0) {
-                        deviceList.innerHTML = '<div style="color: var(--vscode-descriptionForeground); font-style: italic; padding: 10px;">No devices connected</div>';
+                        deviceList.innerHTML = '<div style="color: var(--vscode-descriptionForeground); font-style: italic; padding: 10px; text-align: center;">No devices connected</div>';
                         return;
                     }
 
                     devices.forEach(device => {
-                        const card = document.createElement('div');
-                        card.className = 'device-card';
+                        const item = document.createElement('div');
+                        item.className = 'device-item';
                         
-                        const isOnline = device.type === 'device';
-                        const statusClass = isOnline ? 'status-online' : 'status-offline';
                         const displayName = device.model ? device.model.replace(/_/g, ' ') : device.id;
-                        
-                        // Note: Toggle states are not persisted/read from device yet, defaulting to unchecked or needing state management
-                        // For now, we will assume they are unchecked or we need a way to query them.
-                        // Since ADB doesn't easily give us "is wifi on" without shell commands, we'll use these as stateless toggles 
-                        // or we would need to query state on refresh. For this UI iteration, we'll treat them as actions.
-                        
-                        card.innerHTML = \`
+                        const icon = device.connectionType === 'wireless' 
+                            ? '<svg class="icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.66 10.14a.5.5 0 0 1-.72.08A4.96 4.96 0 0 0 8 9a4.96 4.96 0 0 0-2.94 1.22.5.5 0 0 1-.62-.78A5.95 5.95 0 0 1 8 8c1.3 0 2.5.41 3.5 1.12a.5.5 0 0 1 .16.7v.32zM8 6a7.94 7.94 0 0 1 4.9 1.69.5.5 0 0 1-.6.8A6.95 6.95 0 0 0 8 7a6.95 6.95 0 0 0-4.3 1.49.5.5 0 0 1-.6-.8A7.94 7.94 0 0 1 8 6zm0-3a10.94 10.94 0 0 1 6.8 2.33.5.5 0 1 1-.58.82A9.95 9.95 0 0 0 8 4a9.95 9.95 0 0 0-6.22 2.15.5.5 0 1 1-.58-.82A10.94 10.94 0 0 1 8 3z"/></svg>'
+                            : '<svg class="icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M12 1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM8 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>';
+
+                        item.innerHTML = \`
                             <div class="device-header">
-                                <div>
-                                    <span style="display: block; font-size: 13px;">\${displayName}</span>
-                                    <span style="display: block; font-size: 11px; color: var(--vscode-descriptionForeground); font-weight: normal;">\${device.id}</span>
+                                <div class="device-name">
+                                    \${icon}
+                                    <span>\${displayName}</span>
                                 </div>
-                                <span class="status-indicator \${statusClass}" title="\${device.type}"></span>
+                                <span class="connection-badge">\${device.connectionType}</span>
+                            </div>
+                            <div style="font-size: 11px; color: var(--vscode-descriptionForeground); margin-bottom: 12px; margin-left: 22px;">
+                                ID: \${device.id}
                             </div>
 
-                            <div class="toggles-container">
-                                <div class="toggle-item">
-                                    <label class="switch">
-                                        <input type="checkbox" onchange="toggleFeature('toggleWifi', '\${device.id}', this.checked)">
-                                        <span class="slider"></span>
-                                    </label>
-                                    <span>Wi-Fi</span>
+                            <div class="action-section">
+                                <div class="section-title">Connectivity</div>
+                                
+                                <div class="connectivity-row">
+                                    <span class="connectivity-label">
+                                        <svg class="icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 3a5 5 0 0 1 3.54 1.46l.7-.7A6 6 0 0 0 8 2a6 6 0 0 0-4.24 1.76l.7.7A5 5 0 0 1 8 3zm0 3a2 2 0 0 1 1.41.59l.7-.7A3 3 0 0 0 8 5a3 3 0 0 0-2.12.88l.7.7A2 2 0 0 1 8 6zm0 3a.5.5 0 1 1 0 1 .5.5 0 0 1 0-1zM8 0a8 8 0 0 1 5.66 2.34l-.7.7A7 7 0 0 0 8 1a7 7 0 0 0-4.95 2.05l-.7-.7A8 8 0 0 1 8 0z"/></svg>
+                                        Wi-Fi
+                                    </span>
+                                    <div class="connectivity-actions">
+                                        <button class="secondary small" onclick="toggleFeature('toggleWifi', '\${device.id}', true)">On</button>
+                                        <button class="secondary small" onclick="toggleFeature('toggleWifi', '\${device.id}', false)">Off</button>
+                                    </div>
                                 </div>
-                                <div class="toggle-item">
-                                    <label class="switch">
-                                        <input type="checkbox" onchange="toggleFeature('toggleMobileData', '\${device.id}', this.checked)">
-                                        <span class="slider"></span>
-                                    </label>
-                                    <span>Data</span>
+
+                                <div class="connectivity-row">
+                                    <span class="connectivity-label">
+                                        <svg class="icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M5 9h2v4.5l2-2 1.5 1.5-4.5 4.5-4.5-4.5 1.5-1.5 2 2V9zm6-2V2.5l-2 2-1.5-1.5 4.5-4.5 4.5 4.5-1.5 1.5-2-2V7H11z"/></svg>
+                                        Data
+                                    </span>
+                                    <div class="connectivity-actions">
+                                        <button class="secondary small" onclick="toggleFeature('toggleMobileData', '\${device.id}', true)">On</button>
+                                        <button class="secondary small" onclick="toggleFeature('toggleMobileData', '\${device.id}', false)">Off</button>
+                                    </div>
                                 </div>
-                                <div class="toggle-item">
-                                    <label class="switch">
-                                        <input type="checkbox" onchange="toggleFeature('toggleAirplaneMode', '\${device.id}', this.checked)">
-                                        <span class="slider"></span>
-                                    </label>
-                                    <span>Airplane</span>
+
+                                <div class="connectivity-row">
+                                    <span class="connectivity-label">
+                                        <svg class="icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M10.5 1L9.5 2v5l-4-2V3L4.5 2 3 3.5 4 5H2.5L1 6.5V9l1.5 1.5H4l-1 1.5L4.5 13l1-1v2l1 1 1-1V9.5l4-2V12l1 1 1-1V1z"/></svg>
+                                        Airplane
+                                    </span>
+                                    <div class="connectivity-actions">
+                                        <button class="secondary small" onclick="toggleFeature('toggleAirplaneMode', '\${device.id}', true)">On</button>
+                                        <button class="secondary small" onclick="toggleFeature('toggleAirplaneMode', '\${device.id}', false)">Off</button>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="actions-grid">
-                                <button class="action-btn" onclick="sendCommand('installApk', '\${device.id}')">Install APK</button>
-                                <button class="action-btn" onclick="sendCommand('uninstallApp', '\${device.id}')">Uninstall</button>
-                                <button class="action-btn" onclick="sendCommand('clearAppData', '\${device.id}')">Clear Data</button>
-                                <button class="action-btn" onclick="sendCommand('killApp', '\${device.id}')">Kill App</button>
-                                <button class="action-btn" onclick="sendCommand('logcat', '\${device.id}')">Logcat</button>
-                                <button class="action-btn" onclick="sendCommand('screenshot', '\${device.id}')">Screenshot</button>
-                                <button class="action-btn full-width" style="grid-column: span 2" onclick="sendCommand('setPermission', '\${device.id}')">Manage Permissions</button>
-                                <button class="disconnect-btn" onclick="sendCommand('disconnect', '\${device.id}')">Disconnect</button>
+                            <div class="action-section">
+                                <div class="section-title">App Management</div>
+                                <div class="actions-grid">
+                                    <button class="secondary" onclick="sendCommand('installApk', '\${device.id}')">Install APK</button>
+                                    <button class="secondary" onclick="sendCommand('uninstallApp', '\${device.id}')">Uninstall</button>
+                                    <button class="secondary" onclick="sendCommand('clearAppData', '\${device.id}')">Clear Data</button>
+                                    <button class="secondary" onclick="sendCommand('killApp', '\${device.id}')">Kill App</button>
+                                </div>
+                            </div>
+
+                            <div class="action-section">
+                                <div class="section-title">Tools</div>
+                                <div class="actions-grid">
+                                    <button class="secondary" onclick="sendCommand('logcat', '\${device.id}')">Logcat</button>
+                                    <button class="secondary" onclick="sendCommand('screenshot', '\${device.id}')">Screenshot</button>
+                                    <button class="secondary full-width" onclick="sendCommand('setPermission', '\${device.id}')">Manage Permissions</button>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 12px;">
+                                <button class="secondary" style="color: var(--vscode-errorForeground); width: 100%;" onclick="sendCommand('disconnect', '\${device.id}')">Disconnect</button>
                             </div>
                         \`;
-                        deviceList.appendChild(card);
+                        deviceList.appendChild(item);
                     });
                 }
 
